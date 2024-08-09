@@ -1,3 +1,6 @@
+import Header from "@/components/Header";
+import { ThemeProvider } from "@/lib/ThemeProvider";
+import ReactQueryProvider from "@/providers/react-query";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
@@ -15,8 +18,20 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ReactQueryProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <Header />
+            {children}
+          </ThemeProvider>
+        </ReactQueryProvider>
+      </body>
     </html>
   );
 }
