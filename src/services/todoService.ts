@@ -49,13 +49,3 @@ export const toggletodo = action
     });
     return todo;
   });
-
-export const getTodos = action.handler(async ({}) => {
-  const todos = await prisma.todo.findMany();
-  return todos;
-});
-
-export const getRandomNumber = action.handler(async ({}) => {
-  const number = Math.floor(Math.random() * (100 - 0)) + 0;
-  return number;
-});
