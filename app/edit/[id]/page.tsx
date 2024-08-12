@@ -11,22 +11,12 @@ export default async function page({ params }: { params: { id: string } }) {
     where: {
       id: id,
     },
+    include: {
+      category: true,
+    },
   });
 
   if (!todo) {
-    return notFound();
-  }
-
-  const categoryNames = await prisma.category.findUnique({
-    where: {
-      id: todo.categoryId || undefined,
-    },
-    select: {
-      name: true,
-    },
-  });
-
-  if (!categoryNames) {
     return notFound();
   }
 
@@ -43,7 +33,7 @@ export default async function page({ params }: { params: { id: string } }) {
         Updated At: {new Date(todo.updatedAt).toLocaleString()}
       </p>
       {todo.categoryId && (
-        <p className="text-gray-500">Category name: {categoryNames?.name}</p>
+        <p className="text-gray-500">Category name: {todo?.category?.name}</p>
       )}
       <AddCategory categorys={categorys} idTodo={parseInt(params.id)} />
     </Card>
