@@ -45,6 +45,5 @@ export const deleteCategory = action
       throw new Error("Category not found");
     }
     revalidatePath("/category");
-
     return category;
   });
