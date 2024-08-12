@@ -30,6 +30,7 @@ export default function BadgeTags({ Tags, idTodo }: BadgeTagsProps) {
           <Button
             variant={"destructive"}
             size={"icon"}
+            className="p-2"
             onClick={() => removetagsTodo.mutate({ tagId: tag.id, id: idTodo })}
           >
             <TrashIcon className="h-5 w-5" />
