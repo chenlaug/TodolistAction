@@ -26,7 +26,7 @@ export const createTag = action
         name: trimmedName,
       },
     });
-    revalidatePath("/");
+    revalidatePath("/tag");
     return tag;
   });
 
@@ -46,7 +46,7 @@ export const deleteTag = action
     if (!tag) {
       throw new Error("Tag not found");
     }
-    revalidatePath("/");
+    revalidatePath("/tag");
 
     return tag;
   });
