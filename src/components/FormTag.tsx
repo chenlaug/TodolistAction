@@ -3,14 +3,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useServerActionMutation } from "@/lib/zsa.query";
-import { createTodo } from "@/services/todoService";
+import { createTag } from "@/services/tegServices";
 import { PlusIcon, UpdateIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import React from "react";
 
-export default function FormTodo() {
+export default function FormTag() {
   const router = useRouter();
-  const { isPending, mutate } = useServerActionMutation(createTodo, {
+  const { isPending, mutate } = useServerActionMutation(createTag, {
     onSuccess: () => {
       router.refresh();
     },
@@ -21,16 +21,17 @@ export default function FormTodo() {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formdata = new FormData(e.currentTarget);
-    const todoTitle = String(formdata.get("todo"));
+    const tagTitle = String(formdata.get("tag"));
     e.currentTarget.reset();
-    mutate({ title: todoTitle });
+    mutate({ name: tagTitle });
   };
+  
   return (
     <form
       onSubmit={(e) => onSubmit(e)}
       className=" flex items-center gap-2 w-full my-6"
     >
-      <Input type="text" name="todo" disabled={isPending} placeholder="Todo" />
+      <Input type="text" name="tag" disabled={isPending} placeholder="Tag" />
       <Button disabled={isPending} type="submit" variant={"default"}>
         {isPending ? (
           <UpdateIcon className="h-4 w-4 animate-spin" />
