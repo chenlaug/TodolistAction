@@ -21,21 +21,19 @@ export default function CardCategoryList(props: tegItemProps) {
     },
   });
   return (
-    <Link href={`/category/liste/${props.category.id}`}>
-      <Card
-        key={props.category.id}
-        className="flex items-center p-2 rounded-md"
-      >
+    <Card key={props.category.id} className="flex items-center p-2 rounded-md">
+      <Link href={`/category/liste/${props.category.id}`}>
         <p>{props.category.name}</p>
-        <Button
-          variant="destructive"
-          className="bg-red-500 hover:bg-red-600 ml-2 text-white p-2 rounded"
-          disabled={deleteTodoMutation.isPending}
-          onClick={() => deleteTodoMutation.mutate({ id: props.category.id })}
-        >
-          <TrashIcon className="h-5 w-5" />
-        </Button>
-      </Card>
-    </Link>
+      </Link>
+
+      <Button
+        variant="destructive"
+        className="bg-red-500 hover:bg-red-600 ml-2 text-white p-2 rounded"
+        disabled={deleteTodoMutation.isPending}
+        onClick={() => deleteTodoMutation.mutate({ id: props.category.id })}
+      >
+        <TrashIcon className="h-5 w-5" />
+      </Button>
+    </Card>
   );
 }

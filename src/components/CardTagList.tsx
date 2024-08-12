@@ -22,18 +22,19 @@ export default function CardTagList(props: tegItemProps) {
   });
 
   return (
-    <Link href={`/tag/liste/${props.tag.id}/`}>
-      <Card key={props.tag.id} className="flex items-center p-2 rounded-md">
+    <Card key={props.tag.id} className="flex items-center p-2 rounded-md">
+      <Link href={`/tag/liste/${props.tag.id}/`}>
         <p>{props.tag.name}</p>
-        <Button
-          variant="destructive"
-          className="bg-red-500 hover:bg-red-600 ml-2 text-white p-2 rounded"
-          disabled={deleteTodoMutation.isPending}
-          onClick={() => deleteTodoMutation.mutate({ id: props.tag.id })}
-        >
-          <TrashIcon className="h-5 w-5" />
-        </Button>
-      </Card>
-    </Link>
+      </Link>
+
+      <Button
+        variant="destructive"
+        className="bg-red-500 hover:bg-red-600 ml-2 text-white p-2 rounded"
+        disabled={deleteTodoMutation.isPending}
+        onClick={() => deleteTodoMutation.mutate({ id: props.tag.id })}
+      >
+        <TrashIcon className="h-5 w-5" />
+      </Button>
+    </Card>
   );
 }
