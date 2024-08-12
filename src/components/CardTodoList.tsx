@@ -25,42 +25,40 @@ export default function CardTodoList(props: TodoItemProps) {
 
   return (
     <div className="flex flex-col gap-2">
-      <Link href={`/edit/${props.todo.id}`}>
-        <Card className="flex items-center justify-between p-4 shadow-lg">
-          <div className="flex items-center gap-3">
-            <CheckDone props={props.todo} />
-            <h1
-              className={`text-lg font-semibold ${
-                props.todo.done ? "line-through " : ""
-              }`}
-            >
-              {props.todo.title}
-            </h1>
-          </div>
-          <div className=" space-x-2">
-            <Link href={`/edit/${props.todo.id}`}>
-              <Button
-                variant="default"
-                disabled={deleteTodoMutation.isPending}
-                className="p-2 rounded"
-                title="Edit Todo"
-              >
-                <Pencil2Icon className="h-5 w-5" />
-              </Button>
-            </Link>
-
+      <Card className="flex items-center justify-between p-4 shadow-lg">
+        <div className="flex items-center gap-3">
+          <CheckDone props={props.todo} />
+          <h1
+            className={`text-lg font-semibold ${
+              props.todo.done ? "line-through " : ""
+            }`}
+          >
+            <Link href={`/edit/${props.todo.id}`}>{props.todo.title}</Link>
+          </h1>
+        </div>
+        <div className=" space-x-2">
+          <Link href={`/edit/${props.todo.id}`}>
             <Button
-              variant="destructive"
+              variant="default"
               disabled={deleteTodoMutation.isPending}
-              onClick={() => deleteTodoMutation.mutate({ id: props.todo.id })}
-              className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
-              title="Delete Todo"
+              className="p-2 rounded"
+              title="Edit Todo"
             >
-              <TrashIcon className="h-5 w-5" />
+              <Pencil2Icon className="h-5 w-5" />
             </Button>
-          </div>
-        </Card>
-      </Link>
+          </Link>
+
+          <Button
+            variant="destructive"
+            disabled={deleteTodoMutation.isPending}
+            onClick={() => deleteTodoMutation.mutate({ id: props.todo.id })}
+            className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
+            title="Delete Todo"
+          >
+            <TrashIcon className="h-5 w-5" />
+          </Button>
+        </div>
+      </Card>
     </div>
   );
 }
