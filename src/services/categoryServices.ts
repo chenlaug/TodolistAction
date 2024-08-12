@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/lib/db";
 import { action } from "@/lib/zsh";
+import { revalidatePath } from "next/cache";
 import z from "zod";
 
 export const createCategory = action
@@ -24,7 +25,7 @@ export const createCategory = action
         name: trimmedName,
       },
     });
-
+    revalidatePath("/category");
     return category;
   });
 

@@ -1,6 +1,7 @@
 "use server";
 import { prisma } from "@/lib/db";
 import { action } from "@/lib/zsh";
+import { revalidatePath } from "next/cache";
 import z from "zod";
 
 export const createTag = action
@@ -25,6 +26,7 @@ export const createTag = action
         name: trimmedName,
       },
     });
+    revalidatePath("/tag");
     return tag;
   });
 
