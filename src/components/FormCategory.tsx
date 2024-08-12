@@ -34,7 +34,7 @@ export default function FormTag() {
         type="text"
         name="category"
         disabled={isPending}
-        placeholder="category"
+        placeholder="Category"
       />
       <Button disabled={isPending} type="submit" variant={"default"}>
         {isPending ? (
