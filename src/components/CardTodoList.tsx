@@ -6,7 +6,8 @@ import { Input } from "@/components/ui/input";
 import { useServerActionMutation } from "@/lib/zsa.query";
 import { deleteTodo, toggletodo } from "@/services/todoService";
 import { Todo } from "@prisma/client";
-import { TrashIcon } from "@radix-ui/react-icons";
+import { TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export type TodoItemProps = {
@@ -25,13 +26,10 @@ export default function CardTodoList(props: TodoItemProps) {
       router.refresh();
     },
   });
-  
+
   return (
     <div className="flex flex-col gap-2">
-      <Card
-        key={props.todo.id}
-        className="flex items-center justify-between p-4 shadow-lg"
-      >
+      <Card className="flex items-center justify-between p-4 shadow-lg">
         <div className="flex items-center gap-3">
           <Input
             type="checkbox"
@@ -54,15 +52,28 @@ export default function CardTodoList(props: TodoItemProps) {
             {props.todo.title}
           </h1>
         </div>
-        <Button
-          variant="destructive"
-          disabled={deleteTodoMutation.isPending}
-          onClick={() => deleteTodoMutation.mutate({ id: props.todo.id })}
-          className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
-          title="Delete Todo"
-        >
-          <TrashIcon className="h-5 w-5" />
-        </Button>
+        <div className=" space-x-2">
+          <Link href={`/edit/${props.todo.id}`}>
+            <Button
+              variant="default"
+              disabled={deleteTodoMutation.isPending}
+              className="p-2 rounded"
+              title="Edit Todo"
+            >
+              <Pencil2Icon className="h-5 w-5" />
+            </Button>
+          </Link>
+
+          <Button
+            variant="destructive"
+            disabled={deleteTodoMutation.isPending}
+            onClick={() => deleteTodoMutation.mutate({ id: props.todo.id })}
+            className="bg-red-500 hover:bg-red-600 text-white p-2 rounded"
+            title="Delete Todo"
+          >
+            <TrashIcon className="h-5 w-5" />
+          </Button>
+        </div>
       </Card>
     </div>
   );
