@@ -10,7 +10,7 @@ export default async function Home() {
   return (
     <div>
       <FormTodo />
-      <div className=" space-y-2">
+      <div className="space-y-2">
         {todos.map((todo: Todo) => (
           <>
             <CardTodoList key={todo.id} todo={todo} />
