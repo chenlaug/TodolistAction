@@ -73,3 +73,66 @@ export const changeCategory = action
     });
     return todo;
   });
+
+export const addTags = action
+  .input(
+    z.object({
+      id: z.number(),
+      tagIds: z.array(z.number()),
+    })
+  )
+  .handler(async ({ input }) => {
+    const id = input.id;
+    const tags = input.tagIds;
+    if (!id) {
+      throw new Error("Id is required");
+    }
+
+    if (!tags) {
+      throw new Error("tags is required");
+    }
+
+    const todo = await prisma.todo.update({
+      where: {
+        id: id,
+      },
+      data: {
+        tags: {
+          connect: tags.map((tag) => ({
+            id: tag,
+          })),
+        },
+      },
+    });
+
+    return todo;
+  });
+
+export const removeTags = action
+  .input(z.object({ id: z.number(), tagId: z.number() }))
+  .handler(async ({ input }) => {
+    const id = input.id;
+    const tagId = input.tagId;
+    if (!id) {
+      throw new Error("Id is required");
+    }
+
+    if (!tagId) {
+      throw new Error("tagId is required");
+    }
+
+    const todo = await prisma.todo.update({
+      where: {
+        id: id,
+      },
+      data: {
+        tags: {
+          disconnect: {
+            id: tagId,
+          },
+        },
+      },
+    });
+
+    return todo;
+  });
