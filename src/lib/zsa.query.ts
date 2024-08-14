@@ -3,15 +3,13 @@ import {
   createServerActionsKeyFactory,
   setupServerActionHooks,
 } from "zsa-react-query";
-import { useQueryClient } from "@tanstack/react-query";
 
 export const QueryKeyFactory = createServerActionsKeyFactory({
-  getPosts: () => ["getPosts"],
-  getFriends: () => ["getFriends"],
-  getPostsAndFriends: () => ["getPosts", "getFriends"],
-  somethingElse: (id: string) => ["somethingElse", id],
-  getRandomNumber: () => ["getRandomNumber"],
   getTodos: () => ["getTodos"],
+  getTags: () => ["getTags"],
+  getCategories: () => ["getCategories"],
+  getCategoryWithTodos: (id: string) => ["getCategoryWithTodos", id],
+  getTagWithTodos: (id: string) => ["getTagWithTodos", id],
 });
 
 const {

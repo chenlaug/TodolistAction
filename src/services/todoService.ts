@@ -146,3 +146,19 @@ export const getTodos = action.handler(async () => {
   const todos = await prisma.todo.findMany();
   return todos;
 });
+
+export const getTagWithTodos = action
+  .input(z.object({ id: z.number() }))
+  .handler(async ({ input }) => {
+    const id = input.id;
+    const tagWithTodos = await prisma.tag.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        todos: true,
+      },
+    });
+
+    return tagWithTodos;
+  });

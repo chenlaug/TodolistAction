@@ -26,7 +26,7 @@ export const createTag = action
         name: trimmedName,
       },
     });
-    revalidatePath("/tag");
+
     return tag;
   });
 
@@ -46,7 +46,11 @@ export const deleteTag = action
     if (!tag) {
       throw new Error("Tag not found");
     }
-    revalidatePath("/tag");
 
     return tag;
   });
+
+export const getTags = action.handler(async () => {
+  const tags = await prisma.tag.findMany();
+  return tags;
+});

@@ -6,6 +6,7 @@ import { useServerActionMutation } from "@/lib/zsa.query";
 import { deleteCategory } from "@/services/categoryServices";
 import { Category } from "@prisma/client";
 import { TrashIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -14,10 +15,16 @@ export type tegItemProps = {
 };
 export default function CardCategoryList(props: tegItemProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const deleteTodoMutation = useServerActionMutation(deleteCategory, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getCategories"] });
+    },
+    mutationKey: ["DeleteCategorie"],
+    onError: (err) => {
+      alert(err.message);
     },
   });
   return (

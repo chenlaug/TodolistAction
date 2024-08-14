@@ -5,15 +5,20 @@ import { Input } from "@/components/ui/input";
 import { useServerActionMutation } from "@/lib/zsa.query";
 import { createTag } from "@/services/tegServices";
 import { PlusIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function FormTag() {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { isPending, mutate } = useServerActionMutation(createTag, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getTags"] });
     },
+    mutationKey: ["createTag"],
     onError: (err) => {
       alert(err.message);
     },
@@ -25,7 +30,7 @@ export default function FormTag() {
     e.currentTarget.reset();
     mutate({ name: tagTitle });
   };
-  
+
   return (
     <form
       onSubmit={(e) => onSubmit(e)}

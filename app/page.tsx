@@ -9,7 +9,6 @@ import { Todo } from "@prisma/client";
 export default function Home() {
   const {
     isLoading,
-    isRefetching,
     isSuccess,
     data: todos,
   } = useServerActionQuery(getTodos, {

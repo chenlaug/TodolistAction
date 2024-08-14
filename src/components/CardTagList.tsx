@@ -3,10 +3,11 @@ import { useServerActionMutation } from "@/lib/zsa.query";
 import { deleteTag } from "@/services/tegServices";
 import { Tag } from "@prisma/client";
 import { TrashIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import Link from "next/link";
 
 export type tegItemProps = {
   tag: Tag;
@@ -14,10 +15,16 @@ export type tegItemProps = {
 
 export default function CardTagList(props: tegItemProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const deleteTodoMutation = useServerActionMutation(deleteTag, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getTags"] });
+    },
+    mutationKey: ["DeleteTag"],
+    onError: (err) => {
+      alert(err.message);
     },
   });
 

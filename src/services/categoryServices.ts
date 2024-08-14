@@ -25,7 +25,7 @@ export const createCategory = action
         name: trimmedName,
       },
     });
-    revalidatePath("/category");
+
     return category;
   });
 
@@ -44,6 +44,26 @@ export const deleteCategory = action
     if (!category) {
       throw new Error("Category not found");
     }
-    revalidatePath("/category");
+
     return category;
+  });
+
+export const getCategories = action.handler(async () => {
+  const category = await prisma.category.findMany();
+  return category;
+});
+
+export const getCategoryWithTodos = action
+  .input(z.object({ id: z.number() }))
+  .handler(async ({ input }) => {
+    const id = input.id;
+    const categoryWithTodos = await prisma.category.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        todos: true,
+      },
+    });
+    return categoryWithTodos;
   });

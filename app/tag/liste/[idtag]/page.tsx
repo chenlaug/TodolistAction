@@ -1,34 +1,34 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { prisma } from "@/lib/db";
+import { useServerActionQuery } from "@/lib/zsa.query";
+import { getTagWithTodos } from "@/services/todoService";
 import { Pencil2Icon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import React from "react";
 
-export default async function page({ params }: { params: { idtag: string } }) {
+export default function Page({ params }: { params: { idtag: string } }) {
   const id = parseInt(params.idtag);
 
-  // Fetch the tag with todos
-  const tagWithTodos = await prisma.tag.findUnique({
-    where: {
-      id: id,
-    },
-    include: {
-      todos: true, // Include todos associated with this tag
-    },
+  const {
+    isLoading,
+    isSuccess,
+    data: tags,
+  } = useServerActionQuery(getTagWithTodos, {
+    queryKey: ["getTagWithTodos", id.toString()],
+    input: { id },
   });
 
-  if (!tagWithTodos) {
+  if (!tags) {
     return <h1>Tag not found</h1>;
   }
 
   return (
     <div>
       <h1 className=" text-center my-4 text-4xl ">
-        Tag : <span className="font-bold">{tagWithTodos.name}</span>
+        Tag : <span className="font-bold">{tags.name}</span>
       </h1>
       <div className="flex flex-col gap-2">
-        {tagWithTodos.todos.map((todo) => (
+        {tags.todos.map((todo) => (
           <Card
             key={todo.id}
             className="flex items-center justify-between p-4 shadow-lg"

@@ -5,15 +5,20 @@ import { Input } from "@/components/ui/input";
 import { useServerActionMutation } from "@/lib/zsa.query";
 import { createCategory } from "@/services/categoryServices";
 import { PlusIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function FormTag() {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { isPending, mutate } = useServerActionMutation(createCategory, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getCategories"] });
     },
+    mutationKey: ["createCategory"],
     onError: (err) => {
       alert(err.message);
     },
