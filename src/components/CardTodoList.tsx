@@ -2,14 +2,14 @@
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { useServerActionMutation } from "@/lib/zsa.query";
-import { deleteTodo, toggletodo } from "@/services/todoService";
+import { deleteTodo } from "@/services/todoService";
 import { Todo } from "@prisma/client";
-import { TrashIcon, Pencil2Icon } from "@radix-ui/react-icons";
+import { Pencil2Icon, TrashIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import CheckDone from "./CheckDone";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type TodoItemProps = {
   todo: Todo;
@@ -17,9 +17,16 @@ export type TodoItemProps = {
 
 export default function CardTodoList(props: TodoItemProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const deleteTodoMutation = useServerActionMutation(deleteTodo, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getTodos"] });
+    },
+    mutationKey: ["deleteTodo"],
+    onError: (err) => {
+      alert(err.message);
     },
   });
 

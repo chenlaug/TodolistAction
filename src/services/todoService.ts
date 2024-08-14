@@ -17,7 +17,7 @@ export const createTodo = action
         title: trimmedTitle,
       },
     });
-    revalidatePath("/");
+
     return todo;
   });
 
@@ -30,7 +30,6 @@ export const deleteTodo = action
         id: id,
       },
     });
-    revalidatePath("/");
 
     return todo;
   });
@@ -51,7 +50,6 @@ export const toggletodo = action
         done: input.done,
       },
     });
-    revalidatePath("/");
 
     return todo;
   });
@@ -77,7 +75,6 @@ export const changeCategory = action
         categoryId: categoryId,
       },
     });
-    revalidatePath("/");
 
     return todo;
   });
@@ -112,7 +109,6 @@ export const addTags = action
         },
       },
     });
-    revalidatePath("/");
 
     return todo;
   });
@@ -142,7 +138,11 @@ export const removeTags = action
         },
       },
     });
-    revalidatePath("/");
 
     return todo;
   });
+
+export const getTodos = action.handler(async () => {
+  const todos = await prisma.todo.findMany();
+  return todos;
+});

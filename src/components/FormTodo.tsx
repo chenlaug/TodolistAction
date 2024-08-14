@@ -5,19 +5,25 @@ import { Input } from "@/components/ui/input";
 import { useServerActionMutation } from "@/lib/zsa.query";
 import { createTodo } from "@/services/todoService";
 import { PlusIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React from "react";
 
 export default function FormTodo() {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const { isPending, mutate } = useServerActionMutation(createTodo, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getTodos"] });
     },
+    mutationKey: ["createTodo"],
     onError: (err) => {
       alert(err.message);
     },
   });
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formdata = new FormData(e.currentTarget);
@@ -25,6 +31,7 @@ export default function FormTodo() {
     e.currentTarget.reset();
     mutate({ title: todoTitle });
   };
+  
   return (
     <form
       onSubmit={(e) => onSubmit(e)}
