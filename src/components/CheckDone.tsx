@@ -3,6 +3,7 @@ import { useServerActionMutation } from "@/lib/zsa.query";
 import { toggletodo } from "@/services/todoService";
 import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function CheckDone({
   props,
@@ -10,11 +11,14 @@ export default function CheckDone({
   props: { id: number; done: boolean };
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const toggleTodoMutation = useServerActionMutation(toggletodo, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getAllInfoTodo"] });
     },
+    mutationKey: ["toggletodo"],
   });
   return (
     <Input

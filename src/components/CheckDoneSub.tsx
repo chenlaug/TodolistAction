@@ -1,9 +1,9 @@
 "use client";
 import { useServerActionMutation } from "@/lib/zsa.query";
-import { toggletodo } from "@/services/todoService";
+import { toggletodoSubtask } from "@/services/subtaskServoces";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { Input } from "./ui/input";
-import { toggletodoSubtask } from "@/services/subtaskServoces";
 
 export default function CheckDone({
   props,
@@ -11,9 +11,16 @@ export default function CheckDone({
   props: { id: number; done: boolean };
 }) {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const toggleSubtaskMutation = useServerActionMutation(toggletodoSubtask, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getAllInfoTodo"] });
+    },
+    mutationKey: ["toggletodoSubtask"],
+    onError: (error) => {
+      alert(error.message);
     },
   });
 

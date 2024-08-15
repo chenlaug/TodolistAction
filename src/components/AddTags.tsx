@@ -13,6 +13,7 @@ import { Tag } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { useServerActionMutation } from "@/lib/zsa.query";
 import { addTags } from "@/services/todoService";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type AddTagsProps = {
   tags: Tag[];
@@ -22,13 +23,17 @@ export type AddTagsProps = {
 
 export default function AddTags({ tags, idTodo, todoTags }: AddTagsProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const updateTagTodo = useServerActionMutation(addTags, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getAllInfoTodo"] });
     },
     onError: (error) => {
       console.error(error);
     },
+    mutationKey: ["addTags"],
   });
 
   const [value, setValue] = useState<string[]>([]);

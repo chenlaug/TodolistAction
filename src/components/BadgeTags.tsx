@@ -7,6 +7,7 @@ import { TrashIcon } from "@radix-ui/react-icons";
 import { useRouter } from "next/navigation";
 import { useServerActionMutation } from "@/lib/zsa.query";
 import { removeTags } from "@/services/todoService";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type BadgeTagsProps = {
   Tags: Tag[];
@@ -14,13 +15,16 @@ export type BadgeTagsProps = {
 };
 export default function BadgeTags({ Tags, idTodo }: BadgeTagsProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const removetagsTodo = useServerActionMutation(removeTags, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getAllInfoTodo"] });
     },
     onError: (error) => {
       console.error(error);
     },
+    mutationKey: ["removeTags"],
   });
   return (
     <p className="text-gray-500 space-x-2">

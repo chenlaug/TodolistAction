@@ -1,7 +1,7 @@
 "use server";
+
 import { prisma } from "@/lib/db";
 import { action } from "@/lib/zsh";
-import { revalidatePath } from "next/cache";
 import z from "zod";
 
 export const createTodo = action
@@ -161,4 +161,33 @@ export const getTagWithTodos = action
     });
 
     return tagWithTodos;
+  });
+
+export const getAllInfoTodo = action
+  .input(z.object({ id: z.number() }))
+  .handler(async ({ input }) => {
+    const id = input.id;
+    const categorys = await prisma.category.findMany();
+    const tags = await prisma.tag.findMany();
+    const todo = await prisma.todo.findUnique({
+      where: {
+        id: id,
+      },
+      include: {
+        category: true,
+        tags: true,
+        subtasks: true,
+      },
+    });
+
+    const TodoTags = todo?.tags.map((tag) => {
+      return { id: tag.id, name: tag.name };
+    });
+
+    return {
+      categorys,
+      tags,
+      todo,
+      TodoTags: TodoTags || [], // Ajout d'une valeur par défaut si TodoTags est undefined
+    };
   });

@@ -10,6 +10,7 @@ export const QueryKeyFactory = createServerActionsKeyFactory({
   getCategories: () => ["getCategories"],
   getCategoryWithTodos: (id: string) => ["getCategoryWithTodos", id],
   getTagWithTodos: (id: string) => ["getTagWithTodos", id],
+  getAllInfoTodo: (id: string) => ["getAllInfoTodo", id],
 });
 
 const {

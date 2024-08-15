@@ -7,6 +7,7 @@ import { useServerActionMutation } from "@/lib/zsa.query";
 import { createSubtask } from "@/services/subtaskServoces";
 import { Button } from "./ui/button";
 import { PlusIcon, UpdateIcon } from "@radix-ui/react-icons";
+import { useQueryClient } from "@tanstack/react-query";
 
 export type AddSubtackProps = {
   id: number;
@@ -14,13 +15,16 @@ export type AddSubtackProps = {
 
 export default function AddSubtack(idTodo: AddSubtackProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const { isPending, mutate } = useServerActionMutation(createSubtask, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getAllInfoTodo"] });
     },
     onError: (err) => {
       alert(err.message);
     },
+    mutationKey: ["createSubtask"],
   });
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {

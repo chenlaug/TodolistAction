@@ -9,6 +9,7 @@ import {
 import { useServerActionMutation } from "@/lib/zsa.query";
 import { changeCategory } from "@/services/todoService";
 import { Category } from "@prisma/client";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
 export type AddCategoryProps = {
@@ -18,13 +19,17 @@ export type AddCategoryProps = {
 
 export default function AddCategory(categorys: AddCategoryProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
+
   const updateCategoryTodo = useServerActionMutation(changeCategory, {
     onSuccess: () => {
       router.refresh();
+      queryClient.invalidateQueries({ queryKey: ["getAllInfoTodo"] });
     },
     onError: (error) => {
       console.error(error);
     },
+    mutationKey: ["changeCategory"],
   });
 
   return (
